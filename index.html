@@ -14,6 +14,38 @@
   </head>
   <body>
     <svg id='screen' width='640' height='400' viewBox='0 0 640 400'>
+      <metadata>
+        <scene xmlns='gongoozler'>
+          
+        </scene>
+      </metadata>
     </svg>
+    <script>
+      document.createSVGElement = function createSVGElement(name) {
+        return document.createElementNS("http://www.w3.org/2000/svg", name);
+      };
+      function between(v1, v2) {
+        return v1 + (v2-v1) * (
+          Math.random() + Math.random() + Math.random()
+          + Math.random() + Math.random() + Math.random()
+        )/6;
+      }
+      function mushroom(parentEl, x, y) {
+        var svg = parentEl.ownerSVGElement || parentEl;
+        var mushroom = document.createSVGElement('g');
+        mushroom.setAttribute('transform', 'translate('+x+','+y+')');
+        mushroom.appendChild(mushroom.path = document.createSVGElement('path'));
+        var baseRadius = 15;
+        var height = 100;
+        mushroom.path.setAttribute('d', [
+          'M', -baseRadius, 0,
+          'C', -baseRadius, baseRadius, -baseRadius, -baseRadius, 0, baseRadius,
+          'C', baseRadius, baseRadius, -baseRadius, -baseRadius, 0, baseRadius,
+        ].join(' '));
+        parentEl.appendChild(mushroom);
+      }
+      var screen = document.getElementById('screen');
+      mushroom(screen, 50, 100);
+    </script>
   </body>
 </html>
