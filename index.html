@@ -40,6 +40,10 @@
         )/6;
       }
       var screen = document.getElementById('screen');
+      for (var el = screen.firstElementChild; el; el = el.nextElementSibling) {
+        var pathData = el.getPathData({normalize:true});
+        console.log(pathData);
+      }
     </script>
   </body>
 </html>
