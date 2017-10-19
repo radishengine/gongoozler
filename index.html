@@ -3,7 +3,6 @@
   <head>
     <title>gongoozler</title>
     <script type='text/javascript' src='path-data-polyfill.js'></script>
-    <script type='text/javascript' src='resolution-events.js'></script>
     <style>
       /*
       #screen {
@@ -31,10 +30,9 @@
       function updateViewBox() {
         var screenRect = screenEl.getBoundingClientRect();
         screenEl.setAttribute('viewBox',
-          '0 0 ' + screenRect.width * window.devicePixelRatio
-           + ' ' + screenRect.height * window.devicePixelRatio);
+          '0 0 ' + Math.round((screenRect.right - screenRect.left) * window.devicePixelRatio)
+           + ' ' + Math.round((screenRect.bottom - screenRect.top) * window.devicePixelRatio));
       }
-      window.addEventListener('resolution-changed', updateViewBox);
       window.addEventListener('resize', updateViewBox);
       updateViewBox();
     </script>
