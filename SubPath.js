@@ -143,21 +143,28 @@
         ];
       }
     }
-    else if (el instanceof SVGCircleElement) {
+    else if (el instanceof SVGCircleElement || el instanceof SVGEllipseElement) {
       var cx = el.cx.baseVal.value;
       var cy = el.cy.baseVal.value;
-      var r = el.cy.baseVal.value;
-      if (r === 0) return [];
+      var rx, ry;
+      if (el instanceof SVGEllipseElement) {
+        rx = el.rx.baseVal.value;
+        ry = el.ry.baseVal.value;
+      }
+      else {
+        rx = ry = el.r.baseVal.value;
+      }
+      if (rx === 0 || ry === 0) return [];
       parts = [
-        {type:'M', values[cx+r, cy]},
-        roundedCorner(cx+r, cy, -r, r),
-        roundedCorner(cx, cy+r, -r, -r),
-        roundedCorner(cx-r, cy, r, -r),
-        roundedCorner(cx, cy-r, r, r),
+        {type:'M', values[cx+rx, cy]},
+        roundedCorner(cx+rx, cy, -rx, ry),
+        roundedCorner(cx, cy+ry, -rx, -ry),
+        roundedCorner(cx-rx, cy, rx, -ry),
+        roundedCorner(cx, cy-ry, rx, ry),
       ];
     }
     else {
-      throw new TypeError('must be path, rect or circle element');
+      throw new TypeError('must be path, rect, circle or ellipse element');
     }
     var subpaths = [], subpath, part;
     var x=0, y=0;
