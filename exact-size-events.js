@@ -10,12 +10,12 @@ window.matchMedia('screen and (resolution: ' + window.devicePixelRatio + 'dppx)'
     this.removeListener(listener);
     window.matchMedia('screen and (resolution: ' + window.devicePixelRatio + 'dppx)')
     .addListener(listener);
-    window.dispatchEvent(new Event('exact-size-change'));
+    window.dispatchEvent(new Event('exact-size-changed'));
   }
 });
 
 window.addEventListener('resize', function(e) {
   window.exactWidth = window.innerWidth * window.devicePixelRatio;
   window.exactHeight = window.innerHeight * window.devicePixelRatio;
-  window.dispatchEvent(new Event('exact-size-change'));
+  window.dispatchEvent(new Event('exact-size-changed'));
 });
