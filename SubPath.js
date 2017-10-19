@@ -36,6 +36,61 @@ SubPath.Part.prototype = {
     return this.x1 === this.x2 && this.x3 === this.x3
       && this.y1 === this.y2 && this.y3 === this.y4;
   },
+  getPointAt: function(t) {
+    const $1_t = 1-t;
+    const B0_t = $1_t * $1_t * $1_t,
+          B1_t = 3 * t * $1_t * $1_t,
+          B2_t = 3 * t*t * $1_t,
+          B3_t = t*t*t;
+    return {
+      x: (B0_t * this.x1) + (B1_t * this.x2) + (B2_t * this.x3) + (B3_t * this.x4),
+      y: (B0_t * this.y1) + (B1_t * this.y2) + (B2_t * this.y3) + (B3_t * this.y4),
+    };
+  },
+  splitAt: function(t) {
+    var left = [], right = [];
+    function doCurve(points) {
+      if (points.length === 1) {
+        left.push(points[0]);
+        right.unshift(points[0]);
+        return;
+      }
+      var newpoints = new Array(points.length-1);
+      for (var i = 0; i < newpoints.length; i++) {
+        if (i === 0) {
+          left.push(points[i]);
+        }
+        if (i === newpoints.length-1) {
+          right.unshift(points[i+1])
+        }
+        newpoints[i] = {
+          x: (1-t) * points[i].x + t * points[i+1].x,
+          y: (1-t) * points[i].y + t * points[i+1].y,
+        };
+      }
+      doCurve(newpoints);
+    }
+    doCurve([
+      {x:this.x1, y:this.y1},
+      {x:this.x2, y:this.y2},
+      {x:this.x3, y:this.y3},
+      {x:this.x4, y:this.y4},
+    ]);
+    return [
+      new SubPath.Part(
+        left[0].x, left[0].y,
+        left[1].x, left[1].y,
+        left[2].x, left[2].y,
+        left[3].x, left[3].y
+      ),
+      new SubPath.Part(
+        right[0].x, right[0].y,
+        right[1].x, right[1].y,
+        right[2].x, right[2].y,
+        right[3].x, right[3].y
+      ),
+    ];
+  },
 };
 
 SubPath.Part.fromLine = function(fromX, fromY, toX, toY) {
