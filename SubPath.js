@@ -48,34 +48,25 @@ SubPath.Part.prototype = {
     };
   },
   splitAt: function(t) {
-    var left = [], right = [];
-    function doCurve(points) {
-      if (points.length === 1) {
-        left.push(points[0]);
-        right.unshift(points[0]);
-        return;
-      }
+    var points = [
+      {x:this.x1, y:this.y1},
+      {x:this.x2, y:this.y2},
+      {x:this.x3, y:this.y3},
+      {x:this.x4, y:this.y4},
+    ];
+    var left = [points[0]], right = [points[3]];
+    do {
       var newpoints = new Array(points.length-1);
       for (var i = 0; i < newpoints.length; i++) {
-        if (i === 0) {
-          left.push(points[i]);
-        }
-        if (i === newpoints.length-1) {
-          right.unshift(points[i+1])
-        }
         newpoints[i] = {
           x: (1-t) * points[i].x + t * points[i+1].x,
           y: (1-t) * points[i].y + t * points[i+1].y,
         };
       }
-      doCurve(newpoints);
-    }
-    doCurve([
-      {x:this.x1, y:this.y1},
-      {x:this.x2, y:this.y2},
-      {x:this.x3, y:this.y3},
-      {x:this.x4, y:this.y4},
-    ]);
+      points = newpoints;
+      left.push(points[0]);
+      right.unshift(points[points.length-1])
+    } while (points.length > 1);
     return [
       new SubPath.Part(
         left[0].x, left[0].y,
