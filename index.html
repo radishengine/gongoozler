@@ -35,6 +35,7 @@
            + ' ' + screenRect.height * window.devicePixelRatio);
       }
       window.addEventListener('resolution-changed', updateViewBox);
+      window.addEventListener('resize', updateViewBox);
       updateViewBox();
     </script>
       <!--
