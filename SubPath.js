@@ -143,8 +143,21 @@
         ];
       }
     }
+    else if (el instanceof SVGCircleElement) {
+      var cx = el.cx.baseVal.value;
+      var cy = el.cy.baseVal.value;
+      var r = el.cy.baseVal.value;
+      if (r === 0) return [];
+      parts = [
+        {type:'M', values[cx+r, cy]},
+        roundedCorner(cx+r, cy, -r, r),
+        roundedCorner(cx, cy+r, -r, -r),
+        roundedCorner(cx-r, cy, r, -r),
+        roundedCorner(cx, cy-r, r, r),
+      ];
+    }
     else {
-      throw new TypeError('must be SVGPathElement or SVGRectElement');
+      throw new TypeError('must be path, rect or circle element');
     }
     var subpaths = [], subpath, part;
     var x=0, y=0;
