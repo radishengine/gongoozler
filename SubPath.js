@@ -8,23 +8,16 @@
   }
   SubPath.prototype = {
     toString: function() {
-      var stringified = ['M' + this.parts[0].x1 + ',' + this.parts[0].y1];
+      if (this.parts.length === '') return 'M0,0';
+      var stringified = [this.parts[0].startString];
       for (var i = 0; i < this.parts.length; i++) {
-        var p = this.parts[i];
-        if (p.isLine) stringified.push(
-          'L' + p.x4 + ',' + p.y4
-        );
-        else stringified.push(
-            'C' + p.x2 + ',' + p.y2
-          + ' ' + p.x3 + ',' + p.y3
-          + ' ' + p.x4 + ',' + p.y4
-        );
+        stringified.push(this.parts[i].continueString);
       }
       return stringified.join(' ');
     },
   };
 
-  SubPath.Part = function PathPart(x1,y1, x2,y2, x3,y3, x4,y4) {
+  SubPath.Curve = function Curve(x1,y1, x2,y2, x3,y3, x4,y4) {
     this.x1 = +x1;
     this.y1 = +y1;
     this.x2 = +x2;
@@ -35,10 +28,14 @@
     thix.y4 = +y4;
     Object.freeze(this);
   };
-  SubPath.Part.prototype = {
-    get isLine() {
-      return this.x1 === this.x2 && this.x3 === this.x3
-        && this.y1 === this.y2 && this.y3 === this.y4;
+  SubPath.Curve.prototype = {
+    get startString() {
+      return 'M' + this.x1 + ',' + this.y1;
+    },
+    get continueString() {
+      return 'C' + this.x2 + ',' + this.y2
+        + this.x3 + ',' + this.y3
+        + this.x4 + ',' + this.y4;
     },
     getPointAt: function(t) {
       const $1_t = 1-t;
@@ -72,13 +69,13 @@
         right.unshift(points[points.length-1])
       } while (points.length > 1);
       return [
-        new SubPath.Part(
+        new SubPath.Curve(
           left[0].x, left[0].y,
           left[1].x, left[1].y,
           left[2].x, left[2].y,
           left[3].x, left[3].y
         ),
-        new SubPath.Part(
+        new SubPath.Curve(
           right[0].x, right[0].y,
           right[1].x, right[1].y,
           right[2].x, right[2].y,
@@ -88,10 +85,35 @@
     },
   };
 
-  SubPath.Part.fromLine = function(fromX, fromY, toX, toY) {
-    return new SubPath.Part(fromX,fromY, fromX,fromY, toX,toY, toX,toY);
+  SubPath.Line = function Line(x1,y1, x2,y2) {
+    this.x1 = +x1;
+    this.y1 = +y1;
+    this.x2 = +x2;
+    this.y2 = +y2;
+    Object.freeze(this);
   };
-  
+  SubPath.Line.prototype = {
+    get startString() {
+      return 'M' + this.x1 + ',' + this.y1;
+    },
+    get continueString() {
+      return 'L' + this.x2 + ',' + this.y2;
+    },
+    getPointAt: function(t) {
+      return {
+        x: this.x1 + (this.x2 - this.x1) * t,
+        y: this.y1 + (this.y2 - this.y1) * t,
+      };
+    },
+    splitAt: function(t) {
+      var pt = this.getPointAt(t);
+      return [
+        new SubPath.Line(this.x1, this.y1, pt.x, pt.y),
+        new SubPath.Line(pt.x, pt.y, this.x2, this.y2),
+      ];
+    },
+  };
+
   function roundedCorner(x, y, width, height) {
     return {
       type: 'C',
@@ -195,14 +217,14 @@
           x = part.values[0]; y = part.values[1];
           for (var j = 2; j < part.values.length; j += 2) {
             var px = part.values[j], py = part.values[j+1];
-            subpath.push(new SubPath.Part(x,y, x,y, px,py, px,py));
+            subpath.push(new SubPath.Line(x,y, px,py));
             x = px; y = py;
           }
           break;
         case 'L':
           for (var j = 0; j < part.values.length; j += 2) {
             var px = part.values[j], py = part.values[j+1];
-            subpath.push(new SubPath.Part(x,y, x,y, px,py, px,py));
+            subpath.push(new SubPath.Line(x,y, px,py));
             x = px; y = py;
           }
           break;
@@ -211,7 +233,7 @@
             var x2 = part.values[j  ], y2 = part.values[j+1];
             var x3 = part.values[j+2], y3 = part.values[j+3];
             var x4 = part.values[j+4], y4 = part.values[j+5];
-            subpath.push(new SubPath.Part(x,y, x2,y2, x3,y3, x4,y4));
+            subpath.push(new SubPath.Curve(x,y, x2,y2, x3,y3, x4,y4));
             x = x4; y = y4;
           }
           break;
@@ -219,7 +241,7 @@
           if (subpath && subpath.length > 0) {
             var first = subpath[0],  last = subpath[subpath.length-1];
             if (last.x4 !== first.x1 || last.y4 !== first.y1) {
-              subpath.push(new SubPath.Part(last.x4, last.y4, last.x4, last.x4, first.x1, first.y1, first.x1, first.y1));
+              subpath.push(new SubPath.Line(last.x4, last.y4, first.x1, first.y1));
             }
           }
           break;
