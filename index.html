@@ -3,7 +3,7 @@
   <head>
     <title>gongoozler</title>
     <script type='text/javascript' src='path-data-polyfill.js'></script>
-    <script type='text/javascript' src='exact-size-events.js'></script>
+    <script type='text/javascript' src='resolution-events.js'></script>
     <style>
       /*
       #screen {
@@ -27,11 +27,15 @@
     <svg id='screen'>
     </svg>
     <script>
-      var screen = document.getElementById('screen');
-      screen.setAttribute('viewBox', '0 0 ' + window.exactWidth + ' ' + window.exactHeight);
-      window.addEventListener('exact-size-changed', function(e) {
-        screen.setAttribute('viewBox', '0 0 ' + window.exactWidth + ' ' + window.exactHeight);
-      });
+      var screenEl = document.getElementById('screen');
+      var screenRect = screenEl.getBoundingClientRect();
+      function updateViewBox() {
+        screenEl.setAttribute('viewBox',
+          '0 0 ' + screenRect.width * window.devicePixelRatio
+           + ' ' + screenRect.height * window.devicePixelRatio);
+      }
+      window.addEventListener('resolution-changed', updateViewBox);
+      updateViewBox();
     </script>
       <!--
     <svg id='screen' width='640' height='400' viewBox='0 0 640 400'>
