@@ -163,8 +163,28 @@
         roundedCorner(cx, cy-ry, rx, ry),
       ];
     }
+    else if (el instanceof SVGLineElement) {
+      var x1 = el.x1.baseVal.value;
+      var x2 = el.x2.baseVal.value;
+      var y1 = el.y1.baseVal.value;
+      var y2 = el.y2.baseVal.value;
+      parts = [
+        {type:'M', value:[x1,y1]},
+        {type:'L', value:[x2,y2]},
+      ];
+    }
+    else if (el instanceof SVGPolylineElement || el instanceof SVGPolygonElement) {
+      parts = [{type:'M', values:[el.points[0].x, el.points[0].y]}];
+      for (var i = 1; i < el.points.numberOfItems; i++) {
+        var pt = el.points.getItem(i);
+        parts.push({type:'L', values:[pt.x, pt.y]});
+      }
+      if (el instanceof SVGPolygonElement) {
+        parts.push({type:'Z'});
+      }
+    }
     else {
-      throw new TypeError('must be path, rect, circle or ellipse element');
+      throw new TypeError('must be SVG path or shape element');
     }
     var subpaths = [], subpath, part;
     var x=0, y=0;
