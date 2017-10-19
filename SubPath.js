@@ -2,18 +2,25 @@
 (function() {
   
   'use strict';
+  
+  const NS_SVG = 'http://www.w3.org/2000/svg';
 
   function SubPath() {
     this.parts = [];
   }
   SubPath.prototype = {
     toString: function() {
-      if (this.parts.length === '') return 'M0,0';
+      if (this.parts.length === 0) return 'M0,0';
       var stringified = [this.parts[0].startString];
       for (var i = 0; i < this.parts.length; i++) {
         stringified.push(this.parts[i].continueString);
       }
       return stringified.join(' ');
+    },
+    createElement: function() {
+      var path = document.createElementNS(NS_SVG, 'path');
+      path.setAttribute('d', this.toString());
+      return path;
     },
   };
 
@@ -132,7 +139,7 @@
   SubPath.getFromElement = function getFromElement(el) {
     var parts;
     if (el instanceof SVGPathElement) {
-      parts = pathElement.getPathData({normalize:true});
+      parts = el.getPathData({normalize:true});
     }
     else if (el instanceof SVGRectElement) {
       var x = el.x.baseVal.value;
@@ -241,17 +248,25 @@
           if (subpath && subpath.length > 0) {
             var first = subpath[0],  last = subpath[subpath.length-1];
             if (last.x4 !== first.x1 || last.y4 !== first.y1) {
-              subpath.push(new SubPath.Line(last.x4, last.y4, first.x1, first.y1));
+              subpath.push(new SubPath.Line(
+                last.x4, last.y4,
+                first.x1, first.y1));
             }
           }
           break;
+        default:
+          throw new Error('unexpected part in normalized path: ' + part.type);
       }
     }
     return subpaths;
   };
 
-  SubPath.setToElement = function setToElement(pathElement, subpaths) {
-    pathElement.setAttribute('d', subpaths.join(' '));
+  SubPath.createElement = function createElement(subpaths) {
+    var path = document.createElementNS(NS_SVG, 'path');
+    path.setAttribute('d', subpaths.join(' '));
+    return path;
   };
+  
+  window.SubPath = SubPath;
 
 })();
