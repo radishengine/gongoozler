@@ -28,8 +28,8 @@
     </svg>
     <script>
       var screenEl = document.getElementById('screen');
-      var screenRect = screenEl.getBoundingClientRect();
       function updateViewBox() {
+        var screenRect = screenEl.getBoundingClientRect();
         screenEl.setAttribute('viewBox',
           '0 0 ' + screenRect.width * window.devicePixelRatio
            + ' ' + screenRect.height * window.devicePixelRatio);
