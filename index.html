@@ -38,6 +38,7 @@
       </g>
     </svg>
     <script>
+      var screenBack = document.getElementById('screen-back');
       var screenEl = document.getElementById('screen-container');
       var viewportEl = document.getElementById('viewport');
       var viewportBorder = document.getElementById('viewport-border');
@@ -50,6 +51,8 @@
         var w = Math.round((screenRect.right - screenRect.left) * window.devicePixelRatio);
         var h = Math.round((screenRect.bottom - screenRect.top) * window.devicePixelRatio);
         screenEl.setAttribute('viewBox', '0 0 '+w+' '+h);
+        screenBack.setAttribute('width', w);
+        screenBack.setAttribute('height', h);
         var scale = 1;
         while (((scale+1)*sceneWidth) <= w && ((scale+1)*sceneHeight) <= h) scale++;
         viewportEl.setAttribute('transform', 'translate('
