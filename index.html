@@ -118,7 +118,8 @@
                                + ')');
         viewportBorder.setAttribute('width', sceneWidth * scale + 2);
         viewportBorder.setAttribute('height', sceneHeight * scale + 2);
-        sceneRaw.setAttribute('transform', 'scale(' + scale + ')');
+        sceneRaw.setAttribute('width', screenWidth * scale);
+        sceneRaw.setAttribute('height', screenHeight * scale);
       }
       window.addEventListener('resize', updateViewBox);
       updateViewBox();
