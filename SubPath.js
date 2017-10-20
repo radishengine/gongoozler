@@ -185,7 +185,7 @@
       }
       if (rx === 0 || ry === 0) return [];
       parts = [
-        {type:'M', values[cx+rx, cy]},
+        {type:'M', values:[cx+rx, cy]},
         roundedCorner(cx+rx, cy, -rx, ry),
         roundedCorner(cx, cy+ry, -rx, -ry),
         roundedCorner(cx-rx, cy, rx, -ry),
