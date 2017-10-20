@@ -90,7 +90,8 @@
                style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
           </g>
         </svg>
-        
+        <svg id='scene-final' width='320' height='200'>
+        </svg>
         <rect id='viewport-border' x='-1' y='-1'></rect>
       </g>
     </svg>
@@ -100,6 +101,7 @@
       var viewportEl = document.getElementById('viewport');
       var viewportBorder = document.getElementById('viewport-border');
       var sceneRaw = document.getElementById('scene-raw');
+      var sceneFinal = document.getElementById('scene-final');
       var sceneWidth = 320;
       var sceneHeight = 200;
       function updateViewBox() {
@@ -123,6 +125,31 @@
       }
       window.addEventListener('resize', updateViewBox);
       updateViewBox();
+      function updateScene() {
+        while (sceneFinal.firstChild) sceneFinal.removeChild(sceneFinal.firstChild);
+        function iterate(el) {
+          for (var child = el.firstElementChild; child; child = child.nextElementSibling) {
+            switch (child.nodeName) {
+              case 'g':
+                iterate(child);
+                break;
+              case 'path':
+              case 'circle':
+              case 'ellipse':
+              case 'rect':
+              case 'line':
+              case 'polyline':
+              case 'polygon':
+                var subPaths = SubPath.getFromElement(child);
+                var outPath = SubPath.createElement(subPaths);
+                sceneFinal.appendChild(outPath);
+                break;
+            }
+          }
+        }
+        iterate(sceneRaw);
+      }
+      updateScene();
     </script>
       <!--
     <svg id='screen' width='640' height='400' viewBox='0 0 640 400'>
