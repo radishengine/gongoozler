@@ -141,7 +141,7 @@
               case 'line':
               case 'polyline':
               case 'polygon':
-                var subPaths = SubPath.getFromElement(child);
+                var subPaths = SubPath.getFromElement(child, true);
                 var outPath = SubPath.createElement(subPaths);
                 sceneFinal.appendChild(outPath);
                 break;
