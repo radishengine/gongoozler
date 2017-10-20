@@ -34,7 +34,7 @@
     <svg id='screen-container'>
       <rect id='screen-back'></rect>
       <g id='viewport'>
-        <rect id='viewport-border'></rect>
+        <rect id='viewport-border' x='-1' y='-1'></rect>
       </g>
     </svg>
     <script>
@@ -44,8 +44,6 @@
       var viewportBorder = document.getElementById('viewport-border');
       var sceneWidth = 320;
       var sceneHeight = 200;
-      viewportBorder.setAttribute('width', sceneWidth);
-      viewportBorder.setAttribute('height', sceneHeight);
       function updateViewBox() {
         var screenRect = screenEl.getBoundingClientRect();
         var w = Math.round((screenRect.right - screenRect.left) * window.devicePixelRatio);
@@ -58,8 +56,9 @@
         viewportEl.setAttribute('transform', 'translate('
                                 + (Math.floor((w-(scale * sceneWidth))/2)+0.5)
                                 + ','
-                                + (Math.floor((h-(scale * sceneHeight))/2)+0.5)
-                                + ') scale(' + scale + ')');
+                                + (Math.floor((h-(scale * sceneHeight))/2)+0.5));
+        viewportBorder.setAttribute('width', sceneWidth * scale + 2);
+        viewportBorder.setAttribute('height', sceneHeight * scale + 2);
       }
       window.addEventListener('resize', updateViewBox);
       updateViewBox();
