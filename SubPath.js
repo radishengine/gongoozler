@@ -32,7 +32,7 @@
     this.x3 = +x3;
     this.y3 = +y3;
     this.x4 = +x4;
-    thix.y4 = +y4;
+    this.y4 = +y4;
     Object.freeze(this);
   };
   SubPath.Curve.prototype = {
