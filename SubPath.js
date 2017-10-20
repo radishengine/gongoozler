@@ -136,7 +136,12 @@
     };
   }
 
-  SubPath.getFromElement = function getFromElement(el) {
+  SubPath.getFromElement = function getFromElement(el, transform) {
+    var pt1 = el.ownerSVGElement.createSVGPoint();
+    var pt2 = el.ownerSVGElement.createSVGPoint();
+    var pt3 = el.ownerSVGElement.createSVGPoint();
+    var pt4 = el.ownerSVGElement.createSVGPoint();
+    var mat = transform ? el.getCTM() : el.ownerSVGElement.createSVGMatrix();
     var parts;
     if (el instanceof SVGPathElement) {
       parts = el.getPathData({normalize:true});
@@ -216,32 +221,44 @@
       throw new TypeError('must be SVG path or shape element');
     }
     var subpaths = [], subpath, part;
-    var x=0, y=0;
     for (var i = 0; i < parts.length; i++) {
       switch ((part = parts[i]).type) {
         case 'M':
           subpaths.push(subpath = new SubPath);
-          x = part.values[0]; y = part.values[1];
+          pt1.x = part.values[0];
+          pt1.y = part.values[1];
+          pt1 = pt1.matrixTransform(mat);
           for (var j = 2; j < part.values.length; j += 2) {
-            var px = part.values[j], py = part.values[j+1];
-            subpath.parts.push(new SubPath.Line(x,y, px,py));
-            x = px; y = py;
+            pt2.x = part.values[j];
+            pt2.y = part.values[j+1];
+            pt2 = pt2.matrixTransform(mat);
+            subpath.parts.push(new SubPath.Line(pt1.x,pt1.y, pt2.x,pt2.y));
+            pt1 = pt2;
           }
           break;
         case 'L':
           for (var j = 0; j < part.values.length; j += 2) {
-            var px = part.values[j], py = part.values[j+1];
-            subpath.parts.push(new SubPath.Line(x,y, px,py));
-            x = px; y = py;
+            pt2.x = part.values[j];
+            pt2.y = part.values[j+1];
+            pt2 = pt2.matrixTransform(mat);
+            subpath.parts.push(new SubPath.Line(pt1.x,pt1.y, pt2.x,pt2.y));
+            pt1 = pt2;
           }
           break;
         case 'C':
           for (var j = 0; j < part.values.length; j += 6) {
-            var x2 = part.values[j  ], y2 = part.values[j+1];
-            var x3 = part.values[j+2], y3 = part.values[j+3];
-            var x4 = part.values[j+4], y4 = part.values[j+5];
-            subpath.parts.push(new SubPath.Curve(x,y, x2,y2, x3,y3, x4,y4));
-            x = x4; y = y4;
+            pt2.x = part.values[j  ]; pt2.y = part.values[j+1];
+            pt3.x = part.values[j+2]; pt3.y = part.values[j+3];
+            pt4.x = part.values[j+4]; pt4.y = part.values[j+5];
+            pt2 = pt2.matrixTransform(mat);
+            pt3 = pt3.matrixTransform(mat);
+            pt4 = pt4.matrixTransform(mat);
+            subpath.parts.push(new SubPath.Curve(
+              pt1.x, pt1.y,
+              pt2.x, pt2.y,
+              pt3.x, pt3.y,
+              pt4.x, pt4.y));
+            pt1 = pt4;
           }
           break;
         case 'Z':
