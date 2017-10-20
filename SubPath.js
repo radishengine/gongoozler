@@ -41,8 +41,8 @@
     },
     get continueString() {
       return 'C' + this.x2 + ',' + this.y2
-        + this.x3 + ',' + this.y3
-        + this.x4 + ',' + this.y4;
+        + ' ' + this.x3 + ',' + this.y3
+        + ' ' + this.x4 + ',' + this.y4;
     },
     getPointAt: function(t) {
       const $1_t = 1-t;
