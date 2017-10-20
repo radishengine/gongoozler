@@ -220,18 +220,18 @@
     for (var i = 0; i < parts.length; i++) {
       switch ((part = parts[i]).type) {
         case 'M':
-          subpaths.push(subpath = []);
+          subpaths.push(subpath = new SubPath);
           x = part.values[0]; y = part.values[1];
           for (var j = 2; j < part.values.length; j += 2) {
             var px = part.values[j], py = part.values[j+1];
-            subpath.push(new SubPath.Line(x,y, px,py));
+            subpath.parts.push(new SubPath.Line(x,y, px,py));
             x = px; y = py;
           }
           break;
         case 'L':
           for (var j = 0; j < part.values.length; j += 2) {
             var px = part.values[j], py = part.values[j+1];
-            subpath.push(new SubPath.Line(x,y, px,py));
+            subpath.parts.push(new SubPath.Line(x,y, px,py));
             x = px; y = py;
           }
           break;
@@ -240,7 +240,7 @@
             var x2 = part.values[j  ], y2 = part.values[j+1];
             var x3 = part.values[j+2], y3 = part.values[j+3];
             var x4 = part.values[j+4], y4 = part.values[j+5];
-            subpath.push(new SubPath.Curve(x,y, x2,y2, x3,y3, x4,y4));
+            subpath.parts.push(new SubPath.Curve(x,y, x2,y2, x3,y3, x4,y4));
             x = x4; y = y4;
           }
           break;
@@ -248,7 +248,7 @@
           if (subpath && subpath.length > 0) {
             var first = subpath[0],  last = subpath[subpath.length-1];
             if (last.x4 !== first.x1 || last.y4 !== first.y1) {
-              subpath.push(new SubPath.Line(
+              subpath.parts.push(new SubPath.Line(
                 last.x4, last.y4,
                 first.x1, first.y1));
             }
