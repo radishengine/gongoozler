@@ -56,7 +56,8 @@
         viewportEl.setAttribute('transform', 'translate('
                                 + (Math.floor((w-(scale * sceneWidth))/2)+0.5)
                                 + ','
-                                + (Math.floor((h-(scale * sceneHeight))/2)+0.5));
+                                + (Math.floor((h-(scale * sceneHeight))/2)+0.5)
+                               + ')');
         viewportBorder.setAttribute('width', sceneWidth * scale + 2);
         viewportBorder.setAttribute('height', sceneHeight * scale + 2);
       }
