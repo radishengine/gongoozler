@@ -151,6 +151,9 @@
               case 'polyline':
               case 'polygon':
                 var subPaths = SubPath.getFromElement(child, childMat);
+                for (var i = 0; i < subPaths.length; i++) {
+                  subPaths[i].makeMonotonic();
+                }
                 var outPath = SubPath.createElement(subPaths);
                 var style = window.getComputedStyle(child);
                 var fill = style.getPropertyValue('fill');
