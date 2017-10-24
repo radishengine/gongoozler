@@ -152,6 +152,11 @@
               case 'polygon':
                 var subPaths = SubPath.getFromElement(child, childMat);
                 var outPath = SubPath.createElement(subPaths);
+                var style = window.getComputedStyle(child);
+                var fill = style.getPropertyValue('fill');
+                var stroke = style.getPropertyValue('stroke');
+                outPath.setAttribute('fill', fill);
+                outPath.setAttribute('stroke', stroke);
                 sceneFinal.appendChild(outPath);
                 break;
             }
