@@ -142,6 +142,7 @@
     var pt3 = el.ownerSVGElement.createSVGPoint();
     var pt4 = el.ownerSVGElement.createSVGPoint();
     var mat = transform ? el.getCTM() : el.ownerSVGElement.createSVGMatrix();
+    console.log(mat);
     var parts;
     if (el instanceof SVGPathElement) {
       parts = el.getPathData({normalize:true});
