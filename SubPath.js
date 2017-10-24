@@ -136,24 +136,12 @@
     };
   }
   
-  function findViewportRelativeMatrix(el) {
-    var svg = el.ownerSVGElement;
-    var mat = svg.createSVGMatrix();
-    do {
-      var t = el.transform.baseVal;
-      for (var i = 0; i < t.numberOfItems; i++) {
-        mat = mat.multiply(t.getItem(i).matrix);
-      }
-    } while ((el = el.parentNode) !== svg);
-    return mat;
-  }
-
-  SubPath.getFromElement = function getFromElement(el, transform) {
+  SubPath.getFromElement = function getFromElement(el, mat) {
     var pt1 = el.ownerSVGElement.createSVGPoint();
     var pt2 = el.ownerSVGElement.createSVGPoint();
     var pt3 = el.ownerSVGElement.createSVGPoint();
     var pt4 = el.ownerSVGElement.createSVGPoint();
-    var mat = findViewportRelativeMatrix(el);
+    mat = mat || el.ownerSVGElement.createSVGMatrix();
     var parts;
     if (el instanceof SVGPathElement) {
       parts = el.getPathData({normalize:true});
