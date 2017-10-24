@@ -147,6 +147,9 @@
         new SubPath.Line(pt.x, pt.y, this.x2, this.y2),
       ];
     },
+    getInflections: function() {
+      return [];
+    },
   };
 
   function roundedCorner(x, y, width, height) {
