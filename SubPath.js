@@ -90,6 +90,34 @@
         ),
       ];
     },
+    getInflections: function() {
+      var inflections = [];
+      function inflect(t) {
+        if (t > 0 && t < 1 && inflections.indexOf(t) === -1) {
+          inflections.push(t);
+        }
+      }
+      function cubic_bezier_inflections(v0, v1, v2, v3) {
+        const x = v1-v0, y = v2-v1, z = v3-v2;
+        const p = x-y, q = y-z;
+        const a = p-q, b = -2 * p, c = x;
+        const u = b*b, v = 4*a*c;
+        if (u > v) {
+          const f = -(b + Math.sign(b) * Math.sqrt(u - v)) / 2;
+          inflect(f / a);
+          inflect(c / f);
+        }
+        else if (u === v) {
+          inflect(-b / (2 * a));
+        }
+      }
+      cubic_bezier_inflections(this.x1, this.x2, this.x3, this.x4);
+      cubic_bezier_inflections(this.y1, this.y2, this.y3, this.y4);
+      if (inflections.length > 1) {
+        inflections.sort(function(a,b) { return a-b; });
+      }
+      return inflections;
+    },
   };
 
   SubPath.Line = function Line(x1,y1, x2,y2) {
