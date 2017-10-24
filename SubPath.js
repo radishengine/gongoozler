@@ -22,6 +22,15 @@
       path.setAttribute('d', this.toString());
       return path;
     },
+    makeMonotonic: function() {
+      for (var i = 0; i < this.parts.length; i++) {
+        var inflections = this.parts[i].getInflections();
+        if (inflections.length > 0) {
+          var split = this.parts[i].splitAt(inflections[0]);
+          this.parts.splice(i, 1, split[0], split[1]);
+        }
+      }
+    },
   };
 
   SubPath.Curve = function Curve(x1,y1, x2,y2, x3,y3, x4,y4) {
