@@ -130,11 +130,18 @@
       updateViewBox();
       function updateScene() {
         while (sceneFinal.firstChild) sceneFinal.removeChild(sceneFinal.firstChild);
-        function iterate(el) {
+        function iterate(el, mat) {
           for (var child = el.firstElementChild; child; child = child.nextElementSibling) {
+            var childMat = mat;
+            if ('transform' in el) {
+              var t = el.transform.baseVal;
+              for (var i = 0; i < t.numberOfItems; i++) {
+                childMat = childMat.multiply(t.getItem(i).matrix);
+              }
+            }
             switch (child.nodeName) {
               case 'g':
-                iterate(child);
+                iterate(child, newMat);
                 break;
               case 'path':
               case 'circle':
@@ -143,14 +150,14 @@
               case 'line':
               case 'polyline':
               case 'polygon':
-                var subPaths = SubPath.getFromElement(child, true);
+                var subPaths = SubPath.getFromElement(child, childMat);
                 var outPath = SubPath.createElement(subPaths);
                 sceneFinal.appendChild(outPath);
                 break;
             }
           }
         }
-        iterate(sceneRaw);
+        iterate(sceneRaw, sceneRaw.createMatrix());
       }
       updateScene();
     </script>
