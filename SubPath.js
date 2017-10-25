@@ -32,10 +32,13 @@
             this.parts.splice(i, 1, split[0], split[1]);
             break;
           default:
+            continue;
+            /*
             var args = this.parts[i].splitMulti(inflections);
             args.splice(0, 0, i, 1);
             [].splice.apply(this.parts, args);
             break;
+            */
         }
         i += inflections.length;
       }
