@@ -23,24 +23,18 @@
       return path;
     },
     makeMonotonic: function() {
-      return;
       for (var i = 0; i < this.parts.length; i++) {
         var inflections = this.parts[i].getInflections();
         switch (inflections.length) {
-          case 0: break;
+          case 0: continue;
           case 1:
             var split = this.parts[i].splitAt(inflections[0]);
-            this.parts.splice(i, 1, split[0], split[1]);
-            break;
-          default:
+            this.parts.splice(i++, 1, split[0], split[1]);
             continue;
-            /*
-            var args = this.parts[i].splitMulti(inflections);
-            args.splice(0, 0, i, 1);
-            [].splice.apply(this.parts, args);
-            break;
-            */
         }
+        var args = this.parts[i].splitMulti(inflections);
+        args.splice(0, 0, i, 1);
+        Array.prototype.splice.apply(this.parts, args);
         i += inflections.length;
       }
     },
