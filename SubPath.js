@@ -26,8 +26,7 @@
       for (var i = 0; i < this.parts.length; i++) {
         var inflections = this.parts[i].getInflections();
         if (inflections.length > 0) {
-          var split = this.parts[i].splitAt(inflections[0]);
-          this.parts.splice(i, 1, split[0], split[1]);
+          [].splice.apply(this.parts, [i, 1].concat(this.parts[i].splitMulti(inflections)));
         }
       }
     },
