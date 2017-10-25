@@ -29,7 +29,7 @@
           case 0: break;
           case 1:
             var split = this.parts[i].splitAt(inflections[0]);
-            this.parts[i].splice(i, 1, split[0], split[1]);
+            this.parts.splice(i, 1, split[0], split[1]);
             break;
           default:
             var args = this.parts[i].splitMulti(inflections);
