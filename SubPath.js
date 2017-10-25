@@ -109,16 +109,12 @@
       ];
     },
     splitMulti: function(tValues) {
-      switch (tValues.length) {
-        case 0: return [this];
-        case 1: return this.splitAt(tValues[0]);
-      }
       var parts = [];
       var curve = this;
       var prev_t = 0;
       for (var i = 0; i < tValues.length; i++) {
         var t = tValues[i];
-        var split = curve.split((t - prev_t) / (1 - prev_t));
+        var split = curve.splitAt((t - prev_t) / (1 - prev_t));
         parts.push(split[0]);
         curve = split[1];
         prev_t = t;
