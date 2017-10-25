@@ -25,9 +25,19 @@
     makeMonotonic: function() {
       for (var i = 0; i < this.parts.length; i++) {
         var inflections = this.parts[i].getInflections();
-        if (inflections.length > 0) {
-          [].splice.apply(this.parts, [i, 1].concat(this.parts[i].splitMulti(inflections)));
+        switch (inflections.length) {
+          case 0: break;
+          case 1:
+            var split = this.parts[i].splitAt(inflections[0]);
+            this.parts[i].splice(i, 1, split[0], split[1]);
+            break;
+          default:
+            var args = this.parts[i].splitMulti(inflections);
+            args.splice(0, 0, i, 1);
+            [].splice.apply(this.parts, args);
+            break;
         }
+        i += inflections.length;
       }
     },
   };
