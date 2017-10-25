@@ -65,39 +65,57 @@
       };
     },
     splitAt: function(t) {
-      var points = [
-        {x:this.x1, y:this.y1},
-        {x:this.x2, y:this.y2},
-        {x:this.x3, y:this.y3},
-        {x:this.x4, y:this.y4},
-      ];
-      var left = [points[0]], right = [points[3]];
-      do {
-        var newpoints = new Array(points.length-1);
-        for (var i = 0; i < newpoints.length; i++) {
-          newpoints[i] = {
-            x: (1-t) * points[i].x + t * points[i+1].x,
-            y: (1-t) * points[i].y + t * points[i+1].y,
-          };
-        }
-        points = newpoints;
-        left.push(points[0]);
-        right.unshift(points[points.length-1])
-      } while (points.length > 1);
+      const $1_t = 1-t;
+      const ax1 = this.x1,
+            ay1 = this.y1;
+      const x2=this.x2, y2=this.y2,
+            x3=this.x3, y3=this.y3;
+      const bx4 = this.x4,
+            by4 = this.y4;
+      const mx = $1_t * x2 + t * x3,
+            my = $1_t * y2 + t * y3;
+      const ax2 = $1_t * ax1 + t * x2,
+            ay2 = $1_t * ay1 + t * y2;
+      const ax3 = $1_t * ax2 + t * mx,
+            ay3 = $1_t * ay2 + t * my;
+      const bx3 = $1_t * x3 + t * bx4,
+            by3 = $1_t * y3 + t * by4;
+      const bx2 = $1_t * mx + t * bx3,
+            by2 = $1_t * my + t * by3;
+      const ax4_bx1 = $1_t * ax3 + t * bx2,
+            ay4_by1 = $1_t * ay3 + t * by2;
       return [
         new SubPath.Curve(
-          left[0].x, left[0].y,
-          left[1].x, left[1].y,
-          left[2].x, left[2].y,
-          left[3].x, left[3].y
+          ax1, ay1,
+          ax2, ay2,
+          ax3, ay3,
+          ax4_bx1, ay4_by1,
         ),
         new SubPath.Curve(
-          right[0].x, right[0].y,
-          right[1].x, right[1].y,
-          right[2].x, right[2].y,
-          right[3].x, right[3].y
+          ax4_bx1, ay4_by1,
+          bx2, by2,
+          bx3, by3,
+          bx4, by4,
         ),
       ];
+    },
+    splitMulti: function(tValues) {
+      switch (tValues.length) {
+        case 0: return [this];
+        case 1: return this.splitAt(tValues[0]);
+      }
+      var parts = [];
+      var curve = this;
+      var prev_t = 0;
+      for (var i = 0; i < tValues.length; i++) {
+        var t = tValues[i];
+        var split = curve.split((t - prev_t) / (1 - prev_t));
+        parts.push(split[0]);
+        curve = split[1];
+        prev_t = t;
+      }
+      parts.push(curve);
+      return parts;
     },
     getInflections: function() {
       var inflections = [];
