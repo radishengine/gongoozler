@@ -294,7 +294,7 @@
             pt2.y = part.values[j+1];
             pt2 = pt2.matrixTransform(mat);
             subpath.parts.push(new SubPath.Line(pt1.x,pt1.y, pt2.x,pt2.y));
-            pt1 = pt2;
+            pt1.x = pt2.x; pt1.y = pt2.y;
           }
           break;
         case 'L':
@@ -303,7 +303,7 @@
             pt2.y = part.values[j+1];
             pt2 = pt2.matrixTransform(mat);
             subpath.parts.push(new SubPath.Line(pt1.x,pt1.y, pt2.x,pt2.y));
-            pt1 = pt2;
+            pt1.x = pt2.x; pt1.y = pt2.y;
           }
           break;
         case 'C':
@@ -319,7 +319,7 @@
               pt2.x, pt2.y,
               pt3.x, pt3.y,
               pt4.x, pt4.y));
-            pt1 = pt4;
+            pt1.x = pt4.x; pt1.y = pt4.y;
           }
           break;
         case 'Z':
