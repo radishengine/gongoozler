@@ -23,6 +23,7 @@
       return path;
     },
     makeMonotonic: function() {
+      return;
       for (var i = 0; i < this.parts.length; i++) {
         var inflections = this.parts[i].getInflections();
         switch (inflections.length) {
