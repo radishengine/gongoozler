@@ -154,7 +154,7 @@
                 for (var i = 0; i < subPaths.length; i++) {
                   subPaths[i].makeMonotonic();
                   subPaths[i].normalizeEnds();
-                  subPaths[i].flatten();
+                  subPaths[i].flatten(1.5);
                 }
                 var outPath = SubPath.createElement(subPaths);
                 var style = window.getComputedStyle(child);
