@@ -47,6 +47,56 @@
         i += flat.length - 2;
       }
     },
+    normalizeEnds: function() {
+      for (var i = 0; i < this.parts.length; ) {
+        var part = this.parts[i];
+        if (typeof part.x4 === 'number') {
+          const x1 = part.x1, y1 = part.y1,
+                x2 = part.x2, y2 = part.y2,
+                x3 = part.x3, y3 = part.y3,
+                x4 = part.x4, y4 = part.y4;
+          const x1n = Math.round(x1 - 0.5) + 0.5,
+                y1n = Math.round(y1 - 0.5) + 0.5,
+                x4n = Math.round(x4 - 0.5) + 0.5,
+                y4n = Math.round(y4 - 0.5) + 0.5;
+          const dx = x4n - x1n,
+                dy = y4n - y1n;
+          const d = dx*dx + dy*dy;
+          if (d === 0) {
+            this.parts.splice(i, 1);
+            continue;
+          }
+          if (d <= 2) {
+            this.parts[i] = new SubPath.Line(x1n,y1n, x4n,y4n);
+            i++;
+            continue;
+          }
+          part.x1 = x1n;
+          part.y1 = y1n;
+          part.x2 += (x1n - x1);
+          part.y2 += (y1n - y1);
+          part.x3 += (x4n - x4);
+          part.y3 += (y4n - y4);
+          part.x4 = x4n;
+          part.y4 = y4n;
+        }
+        else {
+          const x1 = Math.round(part.x1 - 0.5) + 0.5,
+                y1 = Math.round(part.y1 - 0.5) + 0.5,
+                x2 = Math.round(part.x2 - 0.5) + 0.5,
+                y2 = Math.round(part.y2 - 0.5) + 0.5;
+          if (x1 === y1 && x2 === y2) {
+            this.parts.splice(i, 1);
+            continue;
+          }
+          part.x1 = x1;
+          part.y1 = y1;
+          part.x2 = x2;
+          part.y2 = y2;
+          i++;
+        }
+      }
+    },
   };
 
   SubPath.Curve = function Curve(x1,y1, x2,y2, x3,y3, x4,y4) {
