@@ -232,7 +232,10 @@
           recurse(depth, x1234, y1234, x234, y234, x34, y34, x4, y4); 
         }
         else if (depth > 0) {
-          lines.push(last = new SubPath.Line(last.x2, last.y2, x1234, y1234));
+          lines.push(last = new SubPath.Line(
+            last.x2, last.y2,
+            Math.round(x1234 - 0.5) + 0.5,
+            Math.round(y1234 - 0.5) + 0.5));
         }
       }
       
