@@ -187,6 +187,7 @@
             }
           });
         });
+        screenEl.requestFullscreen = screenEl.requestFullscreen || function(){};
       }
       if (typeof screenEl.requestPointerLock !== 'function') {
         screenEl.requestPointerLock = screenEl.mozRequestPointerLock
@@ -197,7 +198,7 @@
           || document.webkitExitPointerLock
           || document.msExitPointerLock;
       }
-      ['moz', 'webkit'].forEach(function(prefix) {
+      ['moz', 'webkit', 'ms'].forEach(function(prefix) {
         document.addEventListener(prefix+'fullscreenchange', function(e) {
           e.target.dispatchEvent(new Event('fullscreenchange'));
         });
