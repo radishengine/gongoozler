@@ -168,6 +168,19 @@
         iterate(sceneRaw, sceneRaw.createSVGMatrix());
       }
       updateScene();
+      window.addEventListener('keydown', function(e) {
+        if (e.which === 13 && e.altKey) {
+          screenEl.requestFullscreen();
+        }
+      });
+      document.addEventListener('fullscreenchange', function(e) {
+        if (document.fullscreen) {
+          screenEl.requestPointerLock();
+        }
+        else if (document.pointerLockElement) {
+          document.exitPointerLock();
+        }
+      });
     </script>
       <!--
     <svg id='screen' width='640' height='400' viewBox='0 0 640 400'>
