@@ -168,13 +168,53 @@
         iterate(sceneRaw, sceneRaw.createSVGMatrix());
       }
       updateScene();
+      
+      if (typeof screenEl.requestFullscreen !== 'function') {
+        ['moz', 'webkit', 'ms'].forEach(function(prefix) {
+          screenEl.requestFullscreen = screenEl.requestFullScreen
+            || screenEl[prefix+'RequestFullscreen']
+            || screenEl[prefix+'RequestFullScreen'];
+          document.exitFullscreen = document.exitFullScreen
+            || screenEl[prefix+'ExitFullscreen']
+            || screenEl[prefix+'ExitFullScreen'];
+          [prefix+'FullScreenElement', prefix+'FullscreenElement'].forEach(function(propertyName) {
+            if (propertyName in document && !('fullscreenElement' in document)) {
+              Object.defineProperty(document, 'fullscreenElement', {
+                get: function() {
+                  return this[propertyName];
+                },
+              });
+            }
+          });
+        });
+      }
+      if (typeof screenEl.requestPointerLock !== 'function') {
+        screenEl.requestPointerLock = screenEl.mozRequestPointerLock
+          || screenEl.webkitRequestPointerLock
+          || screenEl.msRequestPointerLock
+          || function(){};
+        document.exitPointerLock = document.mozExitPointerLock
+          || document.webkitExitPointerLock
+          || document.msExitPointerLock;
+      }
+      ['moz', 'webkit'].forEach(function(prefix) {
+        document.addEventListener(prefix+'fullscreenchange', function(e) {
+          e.target.dispatchEvent(new Event('fullscreenchange'));
+        });
+      });
+      
       window.addEventListener('keydown', function(e) {
         if (e.which === 13 && e.altKey) {
-          screenEl.requestFullScreen();
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          }
+          else {
+            screenEl.requestFullscreen();
+          }
         }
       });
       document.addEventListener('fullscreenchange', function(e) {
-        if (document.fullscreen) {
+        if (document.fullscreenElement) {
           screenEl.requestPointerLock();
         }
         else if (document.pointerLockElement) {
