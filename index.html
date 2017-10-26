@@ -153,6 +153,7 @@
                 var subPaths = SubPath.getFromElement(child, childMat);
                 for (var i = 0; i < subPaths.length; i++) {
                   subPaths[i].makeMonotonic();
+                  subPaths[i].normalizeEnds();
                   subPaths[i].flatten();
                 }
                 var outPath = SubPath.createElement(subPaths);
