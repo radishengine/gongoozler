@@ -200,7 +200,7 @@
       }
       ['moz', 'webkit', 'ms'].forEach(function(prefix) {
         document.addEventListener(prefix+'fullscreenchange', function(e) {
-          e.target.dispatchEvent(new Event('fullscreenchange'));
+          e.target.dispatchEvent(new Event('fullscreenchange', {bubbles:true}));
         });
       });
       
