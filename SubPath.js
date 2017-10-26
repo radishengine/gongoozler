@@ -38,6 +38,18 @@
         i += inflections.length;
       }
     },
+    flatten: function(minDeviation) {
+      minDeviation = minDeviation || 1;
+      for (var i = 0; i < this.parts.length; ) {
+        var flat = this.parts[i].flatten(minDeviation);
+        if (flat.length > 1) {
+          flat.splice(0, 0, i, 1);
+          Array.prototype.splice.apply(this.parts, flat);
+          i += flat.length - 2;
+        }
+        else i++;
+      }
+    },
   };
 
   SubPath.Curve = function Curve(x1,y1, x2,y2, x3,y3, x4,y4) {
@@ -148,6 +160,49 @@
       }
       return inflections;
     },
+    flatten: function(minDeviation) {
+      minDeviation = minDeviation || 1;
+      minDeviation *= minDeviation;
+      
+      var last = {x2:this.x1, y2:this.y1};
+      var lines = [];
+
+      function recurse(x1,y1, x2,y2, x3,y3, x4,y4) {
+        const x12 = (x1 + x2) / 2,
+              y12 = (y1 + y2) / 2,
+              x23 = (x2 + x3) / 2,
+              y23 = (y2 + y3) / 2,
+              x34 = (x3 + x4) / 2,
+              y34 = (y3 + y4) / 2;
+        const x123 = (x12 + x23) / 2,
+              y123 = (y12 + y23) / 2,
+              x234 = (x23 + x34) / 2,
+              y234 = (y23 + y34) / 2;
+        const x1234 = (x123 + x234) / 2,
+              y1234 = (y123 + y234) / 2;
+        const dx = x4 - x1,
+              dy = y4 - y1;
+        const d2 = Math.abs(((x2 - x4) * dy - (y2 - y4) * dx)),
+              d3 = Math.abs(((x3 - x4) * dy - (y3 - y4) * dx));
+        if((d2 + d3)*(d2 + d3) >= minDeviation * (dx*dx + dy*dy)) {
+          recurse(x1, y1, x12, y12, x123, y123, x1234, y1234); 
+          recurse(x1234, y1234, x234, y234, x34, y34, x4, y4); 
+        }
+        else {
+          lines.push(last = new SubPath.Line(last.x2, last.y2, x1234, y1234));
+        }
+      }
+      
+      recurse(
+        this.x1, this.y1,
+        this.x2, this.y2,
+        this.x3, this.y3,
+        this.x4, this.y4);
+      
+      lines.push(new SubPath.Line(last.x2, last.y2, this.x4, this.y4));
+      
+      return lines;
+    },
   };
 
   SubPath.Line = function Line(x1,y1, x2,y2) {
@@ -179,6 +234,9 @@
     },
     getInflections: function() {
       return [];
+    },
+    flatten: function() {
+      return [this];
     },
   };
 
