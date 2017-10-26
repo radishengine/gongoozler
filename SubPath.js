@@ -42,12 +42,9 @@
       minDeviation = minDeviation || 1;
       for (var i = 0; i < this.parts.length; ) {
         var flat = this.parts[i].flatten(minDeviation);
-        if (flat.length > 1) {
-          flat.splice(0, 0, i, 1);
-          Array.prototype.splice.apply(this.parts, flat);
-          i += flat.length - 2;
-        }
-        else i++;
+        flat.splice(0, 0, i, 1);
+        Array.prototype.splice.apply(this.parts, flat);
+        i += flat.length - 2;
       }
     },
   };
