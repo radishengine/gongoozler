@@ -175,8 +175,8 @@
             || screenEl[prefix+'RequestFullscreen']
             || screenEl[prefix+'RequestFullScreen'];
           document.exitFullscreen = document.exitFullscreen
-            || screenEl[prefix+'ExitFullscreen']
-            || screenEl[prefix+'ExitFullScreen'];
+            || document[prefix+'ExitFullscreen']
+            || document[prefix+'ExitFullScreen'];
           [prefix+'FullScreenElement', prefix+'FullscreenElement'].forEach(function(propertyName) {
             if (propertyName in document && !('fullscreenElement' in document)) {
               Object.defineProperty(document, 'fullscreenElement', {
