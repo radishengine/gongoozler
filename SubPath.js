@@ -64,21 +64,19 @@
           const d = dx*dx + dy*dy;
           if (d === 0) {
             this.parts.splice(i, 1);
-            continue;
           }
-          if (d <= 2) {
-            this.parts[i] = new SubPath.Line(x1n,y1n, x4n,y4n);
-            i++;
-            continue;
+          else if (d <= 2) {
+            this.parts[i++] = new SubPath.Line(x1n,y1n, x4n,y4n);
           }
-          part.x1 = x1n;
-          part.y1 = y1n;
-          part.x2 += (x1n - x1);
-          part.y2 += (y1n - y1);
-          part.x3 += (x4n - x4);
-          part.y3 += (y4n - y4);
-          part.x4 = x4n;
-          part.y4 = y4n;
+          else {
+            this.parts[i++] = new SubPath.Curve(
+              x1n, y1n,
+              part.x2 + (x1n - x1),
+              part.y2 + (y1n - y1),
+              part.x3 + (x4n - x4),
+              part.y3 + (y4n - y4),
+              x4n, y4n);
+          }
         }
         else {
           const x1 = Math.round(part.x1 - 0.5) + 0.5,
@@ -87,13 +85,10 @@
                 y2 = Math.round(part.y2 - 0.5) + 0.5;
           if (x1 === y1 && x2 === y2) {
             this.parts.splice(i, 1);
-            continue;
           }
-          part.x1 = x1;
-          part.y1 = y1;
-          part.x2 = x2;
-          part.y2 = y2;
-          i++;
+          else {
+            this.parts[i++] = new SubPath.Line(x1,y1, x2,y2);
+          }
         }
       }
     },
