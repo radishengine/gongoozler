@@ -129,8 +129,8 @@
         pt.y = e.clientY;
         var mat = cursor.ownerSVGElement.getScreenCTM().inverse();
         pt = pt.matrixTransform(mat);
-        pt.x = Math.round(pt.x - 0.5) + 0.5;
-        pt.y = Math.round(pt.y - 0.5) + 0.5;
+        pt.x = Math.floor(pt.x) + 0.5;
+        pt.y = Math.floor(pt.y) + 0.5;
         var transform = cursor.ownerSVGElement.createSVGTransform();
         transform.setTranslate(pt.x, pt.y);
         cursor.transform.baseVal.clear();
