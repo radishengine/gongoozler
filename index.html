@@ -249,7 +249,7 @@
         });
       });
       
-      window.addEventListener('keypress' /* edge: keydown won't allow fullscreen */, function(e) {
+      window.addEventListener('keydown', function(e) {
         if (e.which === 13 && e.altKey) {
           if (document.fullscreenElement) {
             document.exitFullscreen();
