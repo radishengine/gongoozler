@@ -124,7 +124,7 @@
       var viewportBack = document.getElementById('viewport-back');
       var viewport = document.getElementById('viewport');
       viewport.addEventListener('mousemove', function(e) {
-        var pt = cursor.ownerSVGElement.createPoint();
+        var pt = cursor.ownerSVGElement.createSVGPoint();
         pt.x = e.clientX;
         pt.y = e.clientY;
         var mat = cursor.ownerSVGElement.getScreenCTM().inverse();
