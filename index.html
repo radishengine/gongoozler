@@ -105,7 +105,7 @@
         <svg id='scene-final' width='320' height='200' viewBox='0 0 320 200'>
         </svg>
         <svg id='cursor-layer' width='320' height='200' viewBox='0 0 320 200'>
-          <g id='cursor'>
+          <g id='cursor' style='visibility:hidden'>
             <rect width='16' height='16' fill='#fff'></rect>
           </g>
         </svg>
@@ -135,6 +135,12 @@
         transform.setTranslate(pt.x, pt.y);
         cursor.transform.baseVal.clear();
         cursor.transform.baseVal.appendItem(transform);
+        cursor.style.visibility = 'visible';
+      });
+      viewport.addEventListener('mouseleave', function(e) {
+        if (e.target === this) {
+          cursor.style.visibility = 'hidden';
+        }
       });
       var sceneWidth = 320;
       var sceneHeight = 200;
