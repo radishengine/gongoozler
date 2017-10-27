@@ -38,6 +38,9 @@
       #viewport {
         cursor: none;
       }
+      #cursor-layer {
+        pointer-events: none;
+      }
     </style>
   </head>
   <body>
@@ -102,7 +105,9 @@
         <svg id='scene-final' width='320' height='200' viewBox='0 0 320 200'>
         </svg>
         <svg id='cursor-layer' width='320' height='200' viewBox='0 0 320 200'>
-          <rect id='cursor' width='32' height='32' fill='#fff'></rect>
+          <g id='cursor'>
+            <rect width='16' height='16' fill='#fff'></rect>
+          </g>
         </svg>
         <rect id='viewport-border' x='-1' y='-1'></rect>
       </g>
@@ -117,6 +122,20 @@
       var cursorLayer = document.getElementById('cursor-layer');
       var cursor = document.getElementById('cursor');
       var viewportBack = document.getElementById('viewport-back');
+      var viewport = document.getElementById('viewport');
+      viewport.addEventListener('mousemove', function(e) {
+        var pt = cursor.ownerSVGElement.createPoint();
+        pt.x = e.clientX;
+        pt.y = e.clientY;
+        var mat = cursor.ownerSVGElement.getScreenCTM().inverse();
+        pt = pt.matrixTransform(mat);
+        pt.x = Math.floor(pt.x);
+        pt.y = Math.floor(pt.y);
+        var transform = cursor.ownerSVGElement.createSVGTransform();
+        transform.setTranslate(pt.x, pt.y);
+        cursor.transform.baseVal.clear();
+        cursor.transform.baseVal.appendItem(transform);
+      });
       var sceneWidth = 320;
       var sceneHeight = 200;
       function updateViewBox() {
