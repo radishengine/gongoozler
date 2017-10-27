@@ -104,7 +104,7 @@
         </svg>
         <svg id='scene-final' width='320' height='200' viewBox='0 0 320 200'>
         </svg>
-        <svg id='cursor-layer' width='320' height='200' viewBox='0 0 320 200' transform='translate(0.5, 0.5)'>
+        <svg id='cursor-layer' width='320' height='200' viewBox='0 0 320 200'>
           <g id='cursor' style='visibility:hidden'>
             <rect width='16' height='16' fill='#fff'></rect>
           </g>
@@ -129,8 +129,8 @@
         pt.y = e.clientY;
         var mat = cursor.ownerSVGElement.getScreenCTM().inverse();
         pt = pt.matrixTransform(mat);
-        pt.x = Math.floor(pt.x);
-        pt.y = Math.floor(pt.y);
+        pt.x = Math.round(pt.x - 0.5) + 0.5;
+        pt.y = Math.round(pt.y - 0.5) + 0.5;
         var transform = cursor.ownerSVGElement.createSVGTransform();
         transform.setTranslate(pt.x, pt.y);
         cursor.transform.baseVal.clear();
