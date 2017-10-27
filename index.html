@@ -31,12 +31,20 @@
         pointer-events: none;
         fill: none;
       }
+      #viewport-back {
+        visibility: hidden;
+        pointer-events: all;
+      }
+      #viewport {
+        cursor: none;
+      }
     </style>
   </head>
   <body>
     <svg id='screen-container'>
       <rect id='screen-back'></rect>
       <g id='viewport'>
+        <rect id='viewport-back'></rect>
         <svg
            xmlns:dc="http://purl.org/dc/elements/1.1/"
            xmlns:cc="http://creativecommons.org/ns#"
@@ -93,6 +101,9 @@
         </svg>
         <svg id='scene-final' width='320' height='200' viewBox='0 0 320 200'>
         </svg>
+        <svg id='cursor-layer' width='320' height='200' viewBox='0 0 320 200'>
+          <rect id='cursor' width='32' height='32' fill='#fff'></rect>
+        </svg>
         <rect id='viewport-border' x='-1' y='-1'></rect>
       </g>
     </svg>
@@ -103,6 +114,9 @@
       var viewportBorder = document.getElementById('viewport-border');
       var sceneRaw = document.getElementById('scene-raw');
       var sceneFinal = document.getElementById('scene-final');
+      var cursorLayer = document.getElementById('cursor-layer');
+      var cursor = document.getElementById('cursor');
+      var viewportBack = document.getElementById('viewport-back');
       var sceneWidth = 320;
       var sceneHeight = 200;
       function updateViewBox() {
@@ -125,6 +139,10 @@
         sceneRaw.setAttribute('height', sceneHeight * scale);
         sceneFinal.setAttribute('width', sceneWidth * scale);
         sceneFinal.setAttribute('height', sceneHeight * scale);
+        cursorLayer.setAttribute('width', sceneWidth * scale);
+        cursorLayer.setAttribute('height', sceneHeight * scale);
+        viewportBack.setAttribute('width', sceneWidth * scale);
+        viewportBack.setAttribute('height', sceneHeight * scale);
       }
       window.addEventListener('resize', updateViewBox);
       updateViewBox();
