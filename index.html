@@ -105,8 +105,10 @@
         <svg id='scene-final' width='320' height='200' viewBox='0 0 320 200'>
         </svg>
         <svg id='cursor-layer' width='320' height='200' viewBox='0 0 320 200'>
-          <g id='cursor' style='visibility:hidden'>
-            <rect width='16' height='16' fill='#fff'></rect>
+          <g id='cursor-group'>
+            <g id='cursor' style='visibility:hidden'>
+              <rect width='16' height='16' fill='#fff'></rect>
+            </g>
           </g>
         </svg>
         <rect id='viewport-border' x='-1' y='-1'></rect>
@@ -121,13 +123,14 @@
       var sceneFinal = document.getElementById('scene-final');
       var cursorLayer = document.getElementById('cursor-layer');
       var cursor = document.getElementById('cursor');
+      var cursorGroup = document.getElementById('cursor-group');
       var viewportBack = document.getElementById('viewport-back');
       var viewport = document.getElementById('viewport');
       viewport.addEventListener('mousemove', function(e) {
-        var pt = cursor.ownerSVGElement.createSVGPoint();
+        var pt = cursorGroup.ownerSVGElement.createSVGPoint();
         pt.x = e.clientX;
         pt.y = e.clientY;
-        var mat = cursor.ownerSVGElement.getScreenCTM().inverse();
+        var mat = cursorGroup.getScreenCTM().inverse();
         pt = pt.matrixTransform(mat);
         pt.x = Math.floor(pt.x) + 0.5;
         pt.y = Math.floor(pt.y) + 0.5;
