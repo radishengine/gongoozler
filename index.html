@@ -252,8 +252,8 @@
         });
       });
       
-      window.addEventListener('keydown', function(e) {
-        if (e.which === 13 && e.altKey) {
+      window.addEventListener('keypress', function(e) {
+        if ((e.keyCode === 10 || e.keyCode === 13) && e.altKey) {
           if (document.fullscreenElement) {
             document.exitFullscreen();
           }
