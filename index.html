@@ -111,7 +111,7 @@
             </g>
           </g>
         </svg>
-        <rect id='viewport-border' x='-1' y='-1'></rect>
+        <rect id='viewport-border' x='-0.5' y='-0.5'></rect>
       </g>
     </svg>
     <script>
@@ -157,9 +157,9 @@
         var scale = 1;
         while (((scale+1)*sceneWidth) <= w && ((scale+1)*sceneHeight) <= h) scale++;
         viewportEl.setAttribute('transform', 'translate('
-                                + (Math.floor((w-(scale * sceneWidth))/2)+0.5)
+                                + (Math.floor((w-(scale * sceneWidth))/2))
                                 + ','
-                                + (Math.floor((h-(scale * sceneHeight))/2)+0.5)
+                                + (Math.floor((h-(scale * sceneHeight))/2))
                                + ')');
         viewportBorder.setAttribute('width', sceneWidth * scale + 2);
         viewportBorder.setAttribute('height', sceneHeight * scale + 2);
