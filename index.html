@@ -132,6 +132,7 @@
         pt.y = e.clientY;
         var mat = cursorGroup.getScreenCTM().inverse();
         pt = pt.matrixTransform(mat);
+        console.log(e.clientX, e.clientY, pt.x, pt.y);
         pt.x = Math.floor(pt.x);
         pt.y = Math.floor(pt.y);
         var transform = cursor.ownerSVGElement.createSVGTransform();
