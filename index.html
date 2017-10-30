@@ -126,13 +126,12 @@
       var cursorGroup = document.getElementById('cursor-group');
       var viewportBack = document.getElementById('viewport-back');
       var viewport = document.getElementById('viewport');
-      viewport.addEventListener('mousemove', function(e) {
+      viewport.addEventListener('pointermove', function(e) {
         var pt = cursorGroup.ownerSVGElement.createSVGPoint();
-        pt.x = e.clientX;
-        pt.y = e.clientY;
+        pt.x = e.screenX;
+        pt.y = e.screenY;
         var mat = cursorGroup.getScreenCTM().inverse();
         pt = pt.matrixTransform(mat);
-        console.log(e.clientX, e.clientY, pt.x, pt.y);
         pt.x = Math.floor(pt.x);
         pt.y = Math.floor(pt.y);
         var transform = cursor.ownerSVGElement.createSVGTransform();
