@@ -107,7 +107,7 @@
         <svg id='cursor-layer' width='320' height='200' viewBox='0 0 320 200'>
           <g id='cursor-group'>
             <g id='cursor' style='visibility:hidden'>
-              <rect width='16' height='16' fill='#fff'></rect>
+              <rect width='16' height='16' x='0.5' y='0.5' fill='#fff'></rect>
             </g>
           </g>
         </svg>
@@ -132,8 +132,8 @@
         pt.y = e.clientY;
         var mat = cursorGroup.getScreenCTM().inverse();
         pt = pt.matrixTransform(mat);
-        pt.x = Math.floor(pt.x) + 0.5;
-        pt.y = Math.floor(pt.y) + 0.5;
+        pt.x = Math.floor(pt.x);
+        pt.y = Math.floor(pt.y);
         var transform = cursor.ownerSVGElement.createSVGTransform();
         transform.setTranslate(pt.x, pt.y);
         cursor.transform.baseVal.clear();
