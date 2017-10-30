@@ -128,7 +128,7 @@
       var cursorGroup = document.getElementById('cursor-group');
       var viewportBack = document.getElementById('viewport-back');
       var viewport = document.getElementById('viewport');
-      viewport.addEventListener('pointermove', function(e) {
+      viewport.addEventListener('mousemove', function(e) {
         var pt = cursorGroup.ownerSVGElement.createSVGPoint();
         pt.x = e.screenX;
         pt.y = e.screenY;
