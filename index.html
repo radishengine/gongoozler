@@ -157,9 +157,9 @@
         var scale = 1;
         while (((scale+1)*sceneWidth) <= w && ((scale+1)*sceneHeight) <= h) scale++;
         viewportEl.setAttribute('transform', 'translate('
-                                + Math.max(0, Math.floor(w-(scale * sceneWidth))/2)
+                                + Math.max(0, Math.floor((w-(scale * sceneWidth))/2))
                                 + ','
-                                + Math.max(0, Math.floor(h-(scale * sceneHeight))/2)
+                                + Math.max(0, Math.floor((h-(scale * sceneHeight))/2))
                                + ')');
         viewportBorder.setAttribute('width', sceneWidth * scale + 2);
         viewportBorder.setAttribute('height', sceneHeight * scale + 2);
