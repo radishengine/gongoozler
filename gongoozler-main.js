@@ -49,7 +49,7 @@ function(domReady) {
   zone2.width.baseVal.value = 30;
   zone2.height.baseVal.value = 100;
   Object.assign(zone2.style, {
-    fill: '#00f',
+    fill: '#0f0',
   });
   screen.appendChild(zone2);
   
