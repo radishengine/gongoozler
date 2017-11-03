@@ -33,7 +33,7 @@ function(domReady) {
     background: '#000',
   });
   
-  var screenWidth = 320, screenHeight = 200, screenScale = 1;
+  var screenWidth = 320, screenHeight = 200, screenScale = 1, screenX = 0, screenY = 0;
   
   document.body.appendChild(screen);
   
@@ -46,8 +46,8 @@ function(domReady) {
   screen.appendChild(cursor);
   
   screen.onmousemove = function(e) {
-    var x = Math.floor((e.clientX - screen.offsetLeft) / screenScale);
-    var y = Math.floor((e.clientY - screen.offsetLeft) / screenScale);
+    var x = Math.floor((e.clientX - screenX) / screenScale);
+    var y = Math.floor((e.clientY - screenY) / screenScale);
     cursor.x.baseVal.value = x;
     cursor.y.baseVal.value = y;
   };
@@ -62,8 +62,8 @@ function(domReady) {
       screenScale++;
     }
     Object.assign(screen.style, {
-      left: Math.max(0, Math.floor((w - screenScale*screenWidth) / 2)),
-      top: Math.max(0, Math.floor((h - screenScale*screenHeight) / 2)),
+      left: screenX = Math.max(0, Math.floor((w - screenScale*screenWidth) / 2)),
+      top: screenY = Math.max(0, Math.floor((h - screenScale*screenHeight) / 2)),
       width: screenScale*screenWidth,
       height: screenScale*screenHeight,
     });
