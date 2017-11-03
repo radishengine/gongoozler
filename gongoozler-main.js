@@ -30,6 +30,7 @@ function(domReady) {
   Object.assign(screen.style, {
     position: 'fixed',
     cursor: 'none',
+    background: '#000',
   });
   
   var screenWidth = 320, screenHeight = 200, screenScale = 1;
