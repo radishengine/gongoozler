@@ -29,26 +29,42 @@ function(domReady) {
   var screen = document.createSVGElement('svg');
   Object.assign(screen.style, {
     position: 'fixed',
+    cursor: 'none',
   });
   
-  var screenWidth = 320, screenHeight = 200;
+  var screenWidth = 320, screenHeight = 200, screenScale = 1;
   
   document.body.appendChild(screen);
+  
+  var cursor = document.createSVGElement('rect');
+  Object.assign(cursor.style, {
+    width: 16,
+    height: 16,
+    fill: '#fff',
+  });
+  screen.appendChild(cursor);
+  
+  screen.onmousemove = function(e) {
+    var x = Math.floor((e.clientX - screen.offsetLeft) / screenScale);
+    var y = Math.floor((e.clientY - screen.offsetLeft) / screenScale);
+    cursor.x = x;
+    cursor.y = y;
+  };
 
   function reframe() {
     screen.viewBox.baseVal.width = screenWidth;
     screen.viewBox.baseVal.height = screenHeight;
     var rect = fullSizeElement.getBoundingClientRect();
     var w = rect.right - rect.left, h = rect.bottom - rect.top;
-    var scale = 1;
-    while ((scale+1)*screenWidth <= w && (scale+1)*screenHeight <= h) {
-      scale++;
+    screenScale = 1;
+    while ((screenScale+1)*screenWidth <= w && (screenScale+1)*screenHeight <= h) {
+      screenScale++;
     }
     Object.assign(screen.style, {
-      left: Math.max(0, Math.floor((w - scale*screenWidth) / 2)),
-      top: Math.max(0, Math.floor((h - scale*screenHeight) / 2)),
-      width: scale*screenWidth,
-      height: scale*screenHeight,
+      left: Math.max(0, Math.floor((w - screenScale*screenWidth) / 2)),
+      top: Math.max(0, Math.floor((h - screenScale*screenHeight) / 2)),
+      width: screenScale*screenWidth,
+      height: screenScale*screenHeight,
     });
   }
   
