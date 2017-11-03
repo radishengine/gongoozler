@@ -42,6 +42,8 @@ function(domReady) {
     width: 16,
     height: 16,
     fill: '#fff',
+    visibility: 'hidden',
+    pointerEvents: 'none',
   });
   screen.appendChild(cursor);
   
@@ -50,6 +52,13 @@ function(domReady) {
     var y = Math.floor((e.clientY - screenY) / screenScale);
     cursor.x.baseVal.value = x;
     cursor.y.baseVal.value = y;
+    cursor.style.visibility = 'visible';
+  };
+  
+  screen.onmouseleave = function(e) {
+    if (e.target === this) {
+      cursor.style.visibility = 'hidden';
+    }
   };
 
   function reframe() {
