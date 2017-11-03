@@ -33,6 +33,26 @@ function(domReady) {
     background: '#000',
   });
   
+  var zone1 = document.createSVGElement('rect');
+  zone1.x.baseVal.value = 50;
+  zone1.y.baseVal.value = 50;
+  zone1.width.baseVal.value = 100;
+  zone1.height.baseVal.value = 20;
+  Object.assign(zone1.style, {
+    fill: '#f00',
+  });
+  screen.appendChild(zone1);
+  
+  var zone2 = document.createSVGElement('rect');
+  zone2.x.baseVal.value = 75;
+  zone2.y.baseVal.value = 60;
+  zone2.width.baseVal.value = 30;
+  zone2.height.baseVal.value = 100;
+  Object.assign(zone2.style, {
+    fill: '#00f',
+  });
+  screen.appendChild(zone2);
+  
   var screenWidth = 320, screenHeight = 200, screenScale = 1, screenX = 0, screenY = 0;
   
   document.body.appendChild(screen);
@@ -47,12 +67,30 @@ function(domReady) {
   });
   screen.appendChild(cursor);
   
+  var currentMouseOver = [];
+  
   screen.onmousemove = function(e) {
-    var x = Math.floor((e.clientX - screenX) / screenScale);
-    var y = Math.floor((e.clientY - screenY) / screenScale);
-    cursor.x.baseVal.value = x;
-    cursor.y.baseVal.value = y;
+    var mouseoverRect = this.createSVGRect();
+    mouseoverRect.x = Math.floor((e.clientX - screenX) / screenScale);
+    mouseoverRect.y = Math.floor((e.clientY - screenY) / screenScale);
+    mouseoverRect.width = mouseoverRect.height = 1;
+    cursor.x.baseVal.value = mouseoverRect.x;
+    cursor.y.baseVal.value = mouseoverRect.y;
     cursor.style.visibility = 'visible';
+    var mouseover = this.getIntersectionList(mouseoverRect, null);
+    for (var i = currentMouseOver.length-1; i >= 0; i--) {
+      var i2 = mouseover.indexOf(currentMouseOver[i]);
+      if (i2 >= 0) {
+        mouseover.splice(i2, 1);
+      }
+      else {
+        currentMouseOver.splice(i, 1)[0].classList.remove('mouseover');
+      }
+    }
+    for (var i = 0; i < mouseover.length; i++) {
+      mouseover[i].classList.add('mouseover');
+      currentMouseOver.push(mouseover[i]);
+    }
   };
   
   screen.onmouseleave = function(e) {
