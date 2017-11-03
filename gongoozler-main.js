@@ -78,6 +78,7 @@ function(domReady) {
     cursor.y.baseVal.value = mouseoverRect.y;
     cursor.style.visibility = 'visible';
     var mouseover = this.getIntersectionList(mouseoverRect, null);
+    mouseover = Array.prototype.slice.apply(mouseover);
     for (var i = currentMouseOver.length-1; i >= 0; i--) {
       var i2 = mouseover.indexOf(currentMouseOver[i]);
       if (i2 >= 0) {
