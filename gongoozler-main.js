@@ -48,8 +48,8 @@ function(domReady) {
   screen.onmousemove = function(e) {
     var x = Math.floor((e.clientX - screen.offsetLeft) / screenScale);
     var y = Math.floor((e.clientY - screen.offsetLeft) / screenScale);
-    cursor.x.baseVal = x;
-    cursor.y.baseVal = y;
+    cursor.x.baseVal.value = x;
+    cursor.y.baseVal.value = y;
   };
 
   function reframe() {
