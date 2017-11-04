@@ -58,9 +58,8 @@ function(domReady) {
   document.body.appendChild(screen);
   
   var cursor = document.createSVGElement('rect');
+  cursor.width.baseVal.value = cursor.height.baseVal.value = 16;
   Object.assign(cursor.style, {
-    width: 16,
-    height: 16,
     fill: '#fff',
     visibility: 'hidden',
     pointerEvents: 'none',
