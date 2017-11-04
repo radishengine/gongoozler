@@ -67,8 +67,6 @@ function(domReady) {
   });
   screen.appendChild(cursor);
   
-  var currentMouseOver = [];
-  
   screen.onmousemove = function(e) {
     var mouseoverRect = this.createSVGRect();
     mouseoverRect.x = Math.floor((e.clientX - screenX) / screenScale);
@@ -77,21 +75,6 @@ function(domReady) {
     cursor.x.baseVal.value = mouseoverRect.x;
     cursor.y.baseVal.value = mouseoverRect.y;
     cursor.style.visibility = 'visible';
-    var mouseover = this.getIntersectionList(mouseoverRect, null);
-    mouseover = Array.prototype.slice.apply(mouseover);
-    for (var i = currentMouseOver.length-1; i >= 0; i--) {
-      var i2 = mouseover.indexOf(currentMouseOver[i]);
-      if (i2 >= 0) {
-        mouseover.splice(i2, 1);
-      }
-      else {
-        currentMouseOver.splice(i, 1)[0].classList.remove('mouseover');
-      }
-    }
-    for (var i = 0; i < mouseover.length; i++) {
-      mouseover[i].classList.add('mouseover');
-      currentMouseOver.push(mouseover[i]);
-    }
   };
   
   screen.onmouseleave = function(e) {
