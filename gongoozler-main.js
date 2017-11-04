@@ -40,7 +40,6 @@ function(domReady) {
   zone1.width.baseVal.value = 100;
   zone1.height.baseVal.value = 20;
   Object.assign(zone1.style, {
-    fill: '#f00',
   });
   screen.appendChild(zone1);
   
@@ -51,7 +50,6 @@ function(domReady) {
   zone2.width.baseVal.value = 30;
   zone2.height.baseVal.value = 100;
   Object.assign(zone2.style, {
-    fill: '#0f0',
   });
   screen.appendChild(zone2);
   
