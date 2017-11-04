@@ -34,6 +34,7 @@ function(domReady) {
   });
   
   var zone1 = document.createSVGElement('rect');
+  zone1.setAttribute('class', 'hotspot');
   zone1.x.baseVal.value = 50;
   zone1.y.baseVal.value = 50;
   zone1.width.baseVal.value = 100;
@@ -44,6 +45,7 @@ function(domReady) {
   screen.appendChild(zone1);
   
   var zone2 = document.createSVGElement('rect');
+  zone2.setAttribute('class', 'hotspot');
   zone2.x.baseVal.value = 75;
   zone2.y.baseVal.value = 60;
   zone2.width.baseVal.value = 30;
